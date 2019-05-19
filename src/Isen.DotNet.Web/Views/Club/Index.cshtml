@@ -1,0 +1,44 @@
+﻿@{
+    ViewData["Title"] = "Tout les clubs";
+}
+@using Isen.DotNet.Library.Models
+@model IEnumerable<Club>
+
+<h1>Tout les clubs</h1>
+
+<table class="table table-striped">
+  <thead>
+      <tr>
+          <th scope="col">Id</th>
+          <th scope="col">Nom</th>
+          <th scope="col">Logo</th>
+          <th scope="col">Latitude</th>
+          <th scope="col">Longitude</th>
+          <th scope="col">Joueur(s)</th>
+          <th>Action...</th>
+      </tr>
+  </thead>
+  <tbody>
+    @foreach(var club in Model)
+    { 
+      <tr>
+          <th scope="row">@club.Id</th>
+          <td>@club.Name</td>
+          <td><img src=@club.Logo width="50" height="50"></td>
+          <td>@club.Latitude</td>
+          <td>@club.Longitude</td>
+          <td>@club.JoueurCollection?.Count</td>
+          <td>
+              <a class="btn btn-outline-primary"
+                 asp-controller="Club"
+                 asp-action="Edit"
+                 asp-route-id="@club.Id">Modifier</a>
+              <a class="btn btn-outline-danger"
+                 asp-controller="Club"
+                 asp-action="Delete"
+                 asp-route-id="@club.Id">Supprimer</a>
+          </td>
+      </tr>
+     }
+  </tbody>
+</table>

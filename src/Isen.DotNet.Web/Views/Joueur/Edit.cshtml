@@ -1,0 +1,82 @@
+﻿@{
+    ViewData["Title"] = "Edition d'un club";
+}
+@using Isen.DotNet.Library.Models
+@using Isen.DotNet.Library.Repositories.Interfaces
+@model Joueur
+@inject IClubRepository _clubRepository
+<h1>Edition d'un joueur</h1>
+
+<div class="row">
+    <div class="col-12">
+        
+        <form class="form-group" asp-action="Edit">
+
+            <input type="hidden"
+                   asp-for="Id"
+                   value="@Model?.Id" />
+
+            <div class="form-group">
+                <label for="LastName">Nom</label>
+                <input id="LastName"
+                       type="text"
+                       class="form-control"
+                       placeholder="Last name"
+                       asp-for="LastName"
+                       value="@Model?.LastName" />
+            </div>
+
+            <div class="form-group">
+                <label for="FirstName">Prénom</label>
+                <input id="FirstName"
+                       type="text"
+                       class="form-control"
+                       placeholder="First name"
+                       asp-for="FirstName"
+                       value="@Model?.FirstName" />
+            </div>
+            
+            @{
+                var dateString = Model?.DateOfBirth
+                    .GetValueOrDefault(DateTime.MinValue)
+                    .ToString("dd/MM/yyyy");
+            }
+
+            <div class="form-group">
+                <label for="DateOfBirth">Date de naissance</label>
+                <input id="DateOfBirth"
+                       type="text"
+                       class="form-control"
+                       placeholder="Date de naissance"
+                       asp-for="DateOfBirth"
+                       value="@dateString" />
+            </div>
+            
+            <div class="form-group">
+                <label for="BornIn">Club de naissance</label>
+                @Html.DropDownListFor(
+                    // Quel champ du modèle (Joueur) est concerné
+                    p => p.BornInId,
+                    // Création d'une liste
+                    new SelectList(
+                        // Données de la liste
+                        _clubRepository.GetAll(),
+                        // Champ correspondant à l'id
+                        "Id",
+                        // Champ correspondant au texte affiché
+                        "Name"),
+                    // Item par défaut
+                    "Sélectionnez une club...",
+                    // Ckasse CSS
+                    new { @class = "form-control" }
+                    )
+            </div>
+
+            <button type="submit" class="btn btn-primary">Valider</button>
+            <a class="btn btn-secondary"
+               asp-controller="Joueur" asp-action="Index">Annuler</a>
+
+        </form>
+
+    </div>
+</div>
